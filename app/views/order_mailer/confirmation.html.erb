@@ -7,7 +7,7 @@
     <tr><th align="left">Produkt</th><th align="right">Množství</th><th align="right">Cena za kus</th><th align="right">Celkem</th></tr>
   </thead>
   <tbody>
-    <% @order.line_items.each do |item| %>
+    <% @order.line_items.includes(:product).each do |item| %>
       <tr>
         <td><%= item.product.name %></td>
         <td align="right"><%= item.quantity %></td>

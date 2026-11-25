@@ -119,6 +119,25 @@ RSpec.describe Orders::PlaceOrder do
       expect { place_order(items:, idempotency_key: "same-key") }
         .not_to have_enqueued_mail(OrderMailer, :confirmation)
     end
+
+    it "returns the existing order when a concurrent request wins the race on the unique index" do
+      items = [ { product_id: product.id, quantity: 2 } ]
+      existing = place_order(items:, idempotency_key: "same-key").order
+      # Simulates a concurrent request: only the existence check at the start does not see the other order yet.
+      calls = 0
+      allow(Order).to receive(:find_by).and_wrap_original do |original, *args, **kwargs|
+        (calls += 1) == 1 ? nil : original.call(*args, **kwargs)
+      end
+
+      result = nil
+      expect { result = place_order(items:, idempotency_key: "same-key") }
+        .not_to have_enqueued_mail(OrderMailer, :confirmation)
+
+      expect(result).to be_success
+      expect(result.order).to eq(existing)
+      expect(Order.count).to eq(1)
+      expect(product.reload.stock).to eq(3)
+    end
   end
 
   describe "failures" do
