@@ -1,24 +1,39 @@
-# README
+# Hudební e-shop
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Jednoduchý e-shop v Ruby on Rails: zákazník si vybere produkty, objedná je bez registrace
+a dostane potvrzení e-mailem. Objednávku může zrušit, nezaplacená objednávka po čase propadne.
 
-Things you may want to cover:
+## Požadavky
 
-* Ruby version
+- Ruby 3.4.13 (`.ruby-version`, `.tool-versions`)
+- PostgreSQL
+- Bundler
 
-* System dependencies
+## Spuštění
 
-* Configuration
+```sh
+bundle install
+bin/rails db:prepare   # vytvoří DB, spustí migrace a nahraje seed produkty
+bin/rails server
+```
 
-* Database creation
+- E-shop: http://localhost:3000
+- Odeslané e-maily (jen development): http://localhost:3000/letter_opener
 
-* Database initialization
+Seeds jdou spustit opakovaně (`bin/rails db:seed`) a vrátí produkty na výchozí sklad.
+Obsahují i vyprodaný produkt (ukulele, 0 ks) a produkt s posledním kusem (bicí, 1 ks).
 
-* How to run the test suite
+## Testy
 
-* Services (job queues, cache servers, search engines, etc.)
+```sh
+bundle exec rspec
+bin/rubocop
+```
 
-* Deployment instructions
+## Co aplikace umí
 
-* ...
+- Katalog produktů s cenou a dostupností (počet kusů skladem).
+- Objednávka více produktů jedním formulářem, bez registrace.
+- Potvrzovací stránka objednávky a potvrzovací e-mail.
+- Zrušení objednávky zákazníkem s vrácením zboží na sklad a e-mailem o zrušení.
+- Automatická expirace nezaplacených objednávek (job) s vrácením zboží na sklad.
