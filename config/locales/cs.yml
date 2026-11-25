@@ -1,0 +1,27 @@
+cs:
+  errors:
+    messages:
+      blank: "je povinné"
+      invalid: "není platné"
+      taken: "už existuje"
+      wrong_length: "musí mít délku přesně %{count}"
+      not_a_number: "není číslo"
+      not_an_integer: "musí být celé číslo"
+      greater_than: "musí být větší než %{count}"
+      greater_than_or_equal_to: "musí být větší nebo rovno %{count}"
+      required: "musí existovat"
+  activerecord:
+    errors:
+      messages:
+        record_invalid: "Validace selhala: %{errors}"
+        restrict_dependent_destroy:
+          has_many: "nelze smazat, protože existují závislé záznamy: %{record}"
+
+  orders:
+    place_order:
+      errors:
+        invalid_quantity: "Množství musí být celé nezáporné číslo."
+        empty_order: "Vyberte alespoň jeden produkt."
+        product_not_found: "Některý z produktů neexistuje."
+        invalid_order: "Zkontrolujte údaje v objednávce."
+        out_of_stock: "Produkt %{product} není skladem v požadovaném množství."
