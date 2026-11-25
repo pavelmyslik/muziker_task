@@ -1,7 +1,8 @@
 class OrdersController < ApplicationController
   def new
     @order = Order.new
-    prepare_form(quantities: {}, idempotency_key: SecureRandom.uuid)
+    quantities = params[:product_id] ? { params[:product_id].to_i => 1 } : {}
+    prepare_form(quantities:, idempotency_key: SecureRandom.uuid)
   end
 
   def create

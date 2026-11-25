@@ -1,16 +1,16 @@
 <h1>Produkty</h1>
 
-<table>
-  <thead>
-    <tr><th>Název</th><th>Cena</th><th>Dostupnost</th></tr>
-  </thead>
-  <tbody>
-    <% @products.each do |product| %>
-      <tr>
-        <td><%= link_to product.name, product %></td>
-        <td><%= number_to_currency(product.price) %></td>
-        <td><%= product.stock.positive? ? "Skladem #{product.stock} ks" : "Vyprodáno" %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<div class="product-grid">
+  <% @products.each do |product| %>
+    <article class="card">
+      <h2 class="card__title"><%= link_to product.name, product %></h2>
+      <div class="price"><%= number_to_currency(product.price) %></div>
+      <%= availability_badge(product) %>
+      <div class="card__actions">
+        <% if product.stock.positive? %>
+          <%= link_to "Objednat", new_order_path(product_id: product.id), class: "button" %>
+        <% end %>
+      </div>
+    </article>
+  <% end %>
+</div>

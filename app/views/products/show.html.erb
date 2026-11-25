@@ -1,7 +1,13 @@
-<h1><%= @product.name %></h1>
+<p><%= link_to "← Zpět na produkty", products_path %></p>
 
-<p><%= @product.description %></p>
-<p>Cena: <%= number_to_currency(@product.price) %></p>
-<p><%= @product.stock.positive? ? "Skladem #{@product.stock} ks" : "Vyprodáno" %></p>
-
-<%= link_to "Zpět na produkty", products_path %>
+<article class="card">
+  <h1 class="card__title"><%= @product.name %></h1>
+  <p class="muted"><%= @product.description %></p>
+  <div class="price"><%= number_to_currency(@product.price) %></div>
+  <%= availability_badge(@product) %>
+  <div class="card__actions">
+    <% if @product.stock.positive? %>
+      <%= link_to "Objednat", new_order_path(product_id: @product.id), class: "button" %>
+    <% end %>
+  </div>
+</article>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="cs">
   <head>
-    <title><%= content_for(:title) || "Muziker Task" %></title>
+    <title><%= content_for(:title) || "Hudební e-shop" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Muziker Task">
@@ -24,6 +24,18 @@
   </head>
 
   <body>
-    <%= yield %>
+    <header class="site-header">
+      <div class="container site-header__inner">
+        <%= link_to "Hudební e-shop", root_path, class: "site-header__brand" %>
+        <nav class="site-nav">
+          <%= link_to "Produkty", products_path %>
+          <%= link_to "Objednávka", new_order_path %>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <%= yield %>
+    </main>
   </body>
 </html>
