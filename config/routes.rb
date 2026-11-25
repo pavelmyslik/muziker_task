@@ -11,4 +11,5 @@ Rails.application.routes.draw do
 
   root "products#index"
   resources :products, only: %i[index show]
+  resources :orders, only: %i[new create show], param: :token
 end

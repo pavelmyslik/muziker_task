@@ -1,0 +1,51 @@
+<h1>Objednávka</h1>
+
+<% if @error_message %>
+  <p><strong><%= @error_message %></strong></p>
+<% end %>
+
+<%= form_with model: @order, url: orders_path do |form| %>
+  <%= hidden_field_tag :idempotency_key, @idempotency_key %>
+
+  <h2>Produkty</h2>
+  <table>
+    <thead>
+      <tr><th>Název</th><th>Cena</th><th>Dostupnost</th><th>Množství</th></tr>
+    </thead>
+    <tbody>
+      <% @products.each do |product| %>
+        <tr>
+          <td><%= product.name %></td>
+          <td><%= number_to_currency(product.price) %></td>
+          <td><%= product.stock.positive? ? "Skladem #{product.stock} ks" : "Vyprodáno" %></td>
+          <td>
+            <% if product.stock.positive? %>
+              <%= hidden_field_tag "items[][product_id]", product.id, id: nil %>
+              <%= number_field_tag "items[][quantity]", @quantities[product.id], min: 0, max: 100, id: "quantity_#{product.id}" %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <h2>Doručovací údaje</h2>
+
+  <% if @order.errors.any? %>
+    <ul>
+      <% @order.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <p><%= form.label :customer_name, "Jméno a příjmení" %><br><%= form.text_field :customer_name, required: true %></p>
+  <p><%= form.label :email, "E-mail" %><br><%= form.email_field :email, required: true %></p>
+  <p><%= form.label :phone, "Telefon" %><br><%= form.telephone_field :phone, required: true %></p>
+  <p><%= form.label :street, "Ulice a číslo" %><br><%= form.text_field :street, required: true %></p>
+  <p><%= form.label :city, "Město" %><br><%= form.text_field :city, required: true %></p>
+  <p><%= form.label :postal_code, "PSČ" %><br><%= form.text_field :postal_code, required: true %></p>
+  <p><%= form.label :country, "Země" %><br><%= form.select :country, [ [ "Česko", "CZ" ], [ "Slovensko", "SK" ] ] %></p>
+
+  <%= form.submit "Objednat" %>
+<% end %>

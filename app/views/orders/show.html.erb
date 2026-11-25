@@ -1,0 +1,31 @@
+<h1>Děkujeme za objednávku</h1>
+
+<p>Číslo objednávky: <%= @order.id %></p>
+
+<table>
+  <thead>
+    <tr><th>Produkt</th><th>Množství</th><th>Cena za kus</th><th>Celkem</th></tr>
+  </thead>
+  <tbody>
+    <% @order.line_items.each do |item| %>
+      <tr>
+        <td><%= item.product.name %></td>
+        <td><%= item.quantity %></td>
+        <td><%= number_to_currency(item.unit_price) %></td>
+        <td><%= number_to_currency(item.subtotal) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<p><strong>Celkem: <%= number_to_currency(@order.total) %></strong></p>
+
+<h2>Doručení</h2>
+<p>
+  <%= @order.customer_name %><br>
+  <%= @order.street %><br>
+  <%= @order.postal_code %> <%= @order.city %>, <%= @order.country %><br>
+  <%= @order.email %>, <%= @order.phone %>
+</p>
+
+<%= link_to "Zpět na produkty", products_path %>
