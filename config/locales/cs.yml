@@ -1,4 +1,12 @@
 cs:
+  number:
+    currency:
+      format:
+        unit: "Kč"
+        format: "%n %u"
+        separator: ","
+        delimiter: " "
+        precision: 2
   errors:
     messages:
       blank: "je povinné"

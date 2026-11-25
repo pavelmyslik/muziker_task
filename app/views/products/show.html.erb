@@ -1,0 +1,7 @@
+<h1><%= @product.name %></h1>
+
+<p><%= @product.description %></p>
+<p>Cena: <%= number_to_currency(@product.price) %></p>
+<p><%= @product.stock.positive? ? "Skladem #{@product.stock} ks" : "Vyprodáno" %></p>
+
+<%= link_to "Zpět na produkty", products_path %>
