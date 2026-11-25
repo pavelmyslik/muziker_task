@@ -38,4 +38,11 @@ RSpec.describe Product do
     expect { product.update_column(:stock, -1) }
       .to raise_error(ActiveRecord::StatementInvalid, /products_stock_non_negative/)
   end
+
+  it "cannot be destroyed when it is part of an order" do
+    product = create(:line_item).product
+
+    expect(product.destroy).to be(false)
+    expect(Product.exists?(product.id)).to be(true)
+  end
 end

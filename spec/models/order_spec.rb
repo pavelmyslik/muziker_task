@@ -55,4 +55,10 @@ RSpec.describe Order do
 
     expect { duplicate.save!(validate: false) }.to raise_error(ActiveRecord::RecordNotUnique)
   end
+
+  it "destroys its line items when destroyed" do
+    order = create(:line_item).order
+
+    expect { order.destroy }.to change(LineItem, :count).by(-1)
+  end
 end

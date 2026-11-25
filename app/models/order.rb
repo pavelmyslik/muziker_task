@@ -1,6 +1,8 @@
 class Order < ApplicationRecord
   has_secure_token :token
 
+  has_many :line_items, dependent: :destroy
+
   normalizes :email, with: ->(email) { email.strip.downcase }
   normalizes :country, with: ->(country) { country.strip.upcase }
 

@@ -1,4 +1,6 @@
 class Product < ApplicationRecord
+  has_many :line_items, dependent: :restrict_with_error
+
   normalizes :name, with: ->(name) { name.strip }
 
   validates :name, presence: true, uniqueness: { case_sensitive: false }
