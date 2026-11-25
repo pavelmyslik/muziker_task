@@ -38,6 +38,9 @@ module MuzikerTask
 
     config.i18n.default_locale = :cs
 
+    # Nezaplacená (pending) objednávka po této době propadne a sklad se uvolní.
+    config.x.orders.pending_expiration = ENV.fetch("ORDER_PENDING_EXPIRATION_DAYS", 14).to_i.days
+
     # Don't generate system test files.
     config.generators.system_tests = nil
   end

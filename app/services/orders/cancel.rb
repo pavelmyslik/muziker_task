@@ -9,7 +9,7 @@ module Orders
         changed = Order.where(id: @order.id, status: "pending")
                        .update_all(status: "cancelled", updated_at: Time.current)
 
-        restock! if changed.positive?
+        RestoreStock.new(@order).call if changed.positive?
         changed.positive?
       end
 
@@ -21,12 +21,6 @@ module Orders
     end
 
     private
-
-    def restock!
-      @order.line_items.order(:product_id).each do |item|
-        Product.where(id: item.product_id).update_all([ "stock = stock + ?", item.quantity ])
-      end
-    end
 
     def failure(error)
       Result.failure(error, I18n.t(error, scope: "orders.cancel.errors"), @order)

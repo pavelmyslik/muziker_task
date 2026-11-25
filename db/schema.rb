@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_25_144345) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_25_145538) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -41,9 +41,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_25_144345) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "status", default: "pending", null: false
+    t.index ["created_at"], name: "index_orders_on_created_at_pending", where: "((status)::text = 'pending'::text)"
     t.index ["idempotency_key"], name: "index_orders_on_idempotency_key", unique: true
     t.index ["token"], name: "index_orders_on_token", unique: true
-    t.check_constraint "status::text = ANY (ARRAY['pending'::character varying, 'cancelled'::character varying]::text[])", name: "orders_status_allowed"
+    t.check_constraint "status::text = ANY (ARRAY['pending'::character varying, 'cancelled'::character varying, 'expired'::character varying]::text[])", name: "orders_status_allowed"
     t.check_constraint "total >= 0::numeric", name: "orders_total_non_negative"
   end
 
