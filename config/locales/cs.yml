@@ -28,8 +28,14 @@ cs:
   order_mailer:
     confirmation:
       subject: "Potvrzení objednávky č. %{id}"
+    cancellation:
+      subject: "Zrušení objednávky č. %{id}"
 
   orders:
+    cancel:
+      success: "Objednávka byla zrušena."
+      errors:
+        not_cancellable: "Objednávku už nelze zrušit."
     place_order:
       errors:
         invalid_quantity: "Množství musí být celé nezáporné číslo."

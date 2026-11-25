@@ -1,9 +1,5 @@
 module Orders
   class PlaceOrder
-    Result = Data.define(:order, :error, :message) do
-      def success? = error.nil?
-    end
-
     class OutOfStock < StandardError
       attr_reader :product
 
@@ -82,13 +78,10 @@ module Orders
       raise OutOfStock, product if updated_rows.zero?
     end
 
-    def success(order)
-      Result.new(order:, error: nil, message: nil)
-    end
+    def success(order) = Result.success(order)
 
     def failure(error, order = nil, **interpolations)
-      message = I18n.t(error, scope: "orders.place_order.errors", **interpolations)
-      Result.new(order:, error:, message:)
+      Result.failure(error, I18n.t(error, scope: "orders.place_order.errors", **interpolations), order)
     end
   end
 end

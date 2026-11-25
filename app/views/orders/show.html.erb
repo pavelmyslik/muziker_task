@@ -1,6 +1,19 @@
-<div class="alert alert--success">
-  <strong>Děkujeme za objednávku!</strong> Číslo objednávky: <%= @order.id %>
-</div>
+<% if notice %>
+  <div class="alert alert--success"><%= notice %></div>
+<% end %>
+<% if alert %>
+  <div class="alert alert--error"><%= alert %></div>
+<% end %>
+
+<% if @order.cancelled? %>
+  <div class="alert alert--error">
+    <strong>Objednávka je zrušená.</strong> Číslo objednávky: <%= @order.id %>
+  </div>
+<% else %>
+  <div class="alert alert--success">
+    <strong>Děkujeme za objednávku!</strong> Číslo objednávky: <%= @order.id %>
+  </div>
+<% end %>
 
 <h1>Souhrn objednávky</h1>
 
@@ -31,5 +44,11 @@
   </div>
   <div class="muted"><%= @order.email %> · <%= @order.phone %></div>
 </div>
+
+<% if @order.pending? %>
+  <div class="form-actions">
+    <%= button_to "Zrušit objednávku", cancel_order_path(@order.token), class: "button" %>
+  </div>
+<% end %>
 
 <p><%= link_to "← Zpět na produkty", products_path %></p>

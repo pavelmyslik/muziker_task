@@ -29,6 +29,17 @@ class OrdersController < ApplicationController
     @order = Order.includes(line_items: :product).find_by!(token: params[:token])
   end
 
+  def cancel
+    order = Order.find_by!(token: params[:token])
+    result = Orders::Cancel.new(order).call
+
+    if result.success?
+      redirect_to order_path(order.token), notice: t("orders.cancel.success")
+    else
+      redirect_to order_path(order.token), alert: result.message
+    end
+  end
+
   private
 
   def prepare_form(quantities:, idempotency_key:)

@@ -1,0 +1,22 @@
+<h1>Objednávka byla zrušena</h1>
+
+<p>Vaše objednávka č. <strong><%= @order.id %></strong> byla zrušena.</p>
+
+<table cellpadding="6" style="border-collapse: collapse;">
+  <thead>
+    <tr><th align="left">Produkt</th><th align="right">Množství</th><th align="right">Celkem</th></tr>
+  </thead>
+  <tbody>
+    <% @order.line_items.each do |item| %>
+      <tr>
+        <td><%= item.product.name %></td>
+        <td align="right"><%= item.quantity %></td>
+        <td align="right"><%= number_to_currency(item.subtotal) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<p>Celkem: <%= number_to_currency(@order.total) %></p>
+
+<p><%= link_to "Zobrazit objednávku", order_url(@order.token) %></p>

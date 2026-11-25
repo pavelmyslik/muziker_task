@@ -1,0 +1,11 @@
+Objednávka byla zrušena
+
+Vaše objednávka č. <%= @order.id %> byla zrušena.
+
+<% @order.line_items.each do |item| -%>
+- <%= item.product.name %>: <%= item.quantity %> ks = <%= number_to_currency(item.subtotal) %>
+<% end -%>
+
+Celkem: <%= number_to_currency(@order.total) %>
+
+Zobrazit objednávku: <%= order_url(@order.token) %>

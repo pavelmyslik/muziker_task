@@ -4,4 +4,10 @@ class OrderMailer < ApplicationMailer
 
     mail to: order.email, subject: default_i18n_subject(id: order.id)
   end
+
+  def cancellation(order)
+    @order = order
+
+    mail to: order.email, subject: default_i18n_subject(id: order.id)
+  end
 end

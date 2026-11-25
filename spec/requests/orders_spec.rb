@@ -45,4 +45,15 @@ RSpec.describe "Orders", type: :request do
       expect(response).to have_http_status(:not_found)
     end
   end
+
+  describe "POST /orders/:token/cancel" do
+    it "cancels the order and redirects to its confirmation page" do
+      order = create(:order)
+
+      post cancel_order_path(order.token)
+
+      expect(response).to redirect_to(order_path(order.token))
+      expect(order.reload).to be_cancelled
+    end
+  end
 end
