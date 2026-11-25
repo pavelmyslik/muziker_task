@@ -10,9 +10,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_25_132933) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_25_135017) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "orders", force: :cascade do |t|
+    t.string "customer_name", null: false
+    t.string "email", null: false
+    t.string "phone", null: false
+    t.string "street", null: false
+    t.string "city", null: false
+    t.string "postal_code", null: false
+    t.string "country", limit: 2, null: false
+    t.decimal "total", precision: 10, scale: 2, null: false
+    t.string "token", null: false
+    t.string "idempotency_key", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["idempotency_key"], name: "index_orders_on_idempotency_key", unique: true
+    t.index ["token"], name: "index_orders_on_token", unique: true
+    t.check_constraint "total >= 0::numeric", name: "orders_total_non_negative"
+  end
 
   create_table "products", force: :cascade do |t|
     t.string "name", null: false
