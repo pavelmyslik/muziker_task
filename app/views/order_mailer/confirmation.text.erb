@@ -1,0 +1,11 @@
+Děkujeme za objednávku
+
+Číslo objednávky: <%= @order.id %>
+
+<% @order.line_items.each do |item| -%>
+- <%= item.product.name %>: <%= item.quantity %> × <%= number_to_currency(item.unit_price) %> = <%= number_to_currency(item.subtotal) %>
+<% end -%>
+
+Celkem: <%= number_to_currency(@order.total) %>
+
+Zobrazit objednávku: <%= order_url(@order.token) %>

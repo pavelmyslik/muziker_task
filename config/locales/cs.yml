@@ -25,6 +25,10 @@ cs:
         restrict_dependent_destroy:
           has_many: "nelze smazat, protože existují závislé záznamy: %{record}"
 
+  order_mailer:
+    confirmation:
+      subject: "Potvrzení objednávky č. %{id}"
+
   orders:
     place_order:
       errors:

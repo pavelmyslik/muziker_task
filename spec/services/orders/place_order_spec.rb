@@ -48,6 +48,11 @@ RSpec.describe Orders::PlaceOrder do
       expect(result.order.line_items.map(&:quantity)).to eq([ 3 ])
       expect(guitar.reload.stock).to eq(2)
     end
+
+    it "enqueues the confirmation e-mail" do
+      expect { place_order(items: [ { product_id: guitar.id, quantity: 1 } ]) }
+        .to have_enqueued_mail(OrderMailer, :confirmation)
+    end
   end
 
   context "when one of the products is out of stock" do
@@ -68,6 +73,11 @@ RSpec.describe Orders::PlaceOrder do
       expect(result.message).to include(strings.name)
       expect(guitar.reload.stock).to eq(5)
       expect(strings.reload.stock).to eq(1)
+    end
+
+    it "does not enqueue the confirmation e-mail" do
+      expect { place_order(items: [ { product_id: strings.id, quantity: 2 } ]) }
+        .not_to have_enqueued_mail(OrderMailer, :confirmation)
     end
   end
 
@@ -100,6 +110,14 @@ RSpec.describe Orders::PlaceOrder do
       expect(second).to be_success
       expect(second.order).to eq(first.order)
       expect(product.reload.stock).to eq(3)
+    end
+
+    it "does not enqueue another e-mail for the repeated submission" do
+      items = [ { product_id: product.id, quantity: 1 } ]
+      place_order(items:, idempotency_key: "same-key")
+
+      expect { place_order(items:, idempotency_key: "same-key") }
+        .not_to have_enqueued_mail(OrderMailer, :confirmation)
     end
   end
 

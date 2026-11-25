@@ -38,6 +38,8 @@ module Orders
         order.save!
       end
 
+      OrderMailer.confirmation(order).deliver_later
+
       success(order)
     rescue OutOfStock => e
       failure(:out_of_stock, order, product: e.product.name)
