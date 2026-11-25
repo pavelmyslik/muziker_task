@@ -17,6 +17,44 @@ RSpec.describe Order do
     expect(build(:order, country: "cz").country).to eq("CZ")
   end
 
+  it "normalizes phone by removing whitespace" do
+    expect(build(:order, phone: "+420 777 123 456").phone).to eq("+420777123456")
+  end
+
+  it "normalizes postal code by removing whitespace" do
+    expect(build(:order, postal_code: " 110 00 ").postal_code).to eq("11000")
+  end
+
+  %w[777123456 +420777123456 00421777123456 +44777123456].each do |phone|
+    it "accepts phone #{phone}" do
+      expect(build(:order, phone:)).to be_valid
+    end
+  end
+
+  %w[12345 777-123-456 abc +1234567890123456].each do |phone|
+    it "rejects phone #{phone}" do
+      order = build(:order, phone:)
+
+      expect(order).not_to be_valid
+      expect(order.errors[:phone]).to be_present
+    end
+  end
+
+  [ "11000", "110 00" ].each do |postal_code|
+    it "accepts postal code #{postal_code.inspect}" do
+      expect(build(:order, postal_code:)).to be_valid
+    end
+  end
+
+  [ "1100", "110000", "ABC 12" ].each do |postal_code|
+    it "rejects postal code #{postal_code.inspect}" do
+      order = build(:order, postal_code:)
+
+      expect(order).not_to be_valid
+      expect(order.errors[:postal_code]).to be_present
+    end
+  end
+
   it "rejects an invalid email" do
     order = build(:order, email: "not-an-email")
 
